@@ -13,34 +13,36 @@ import { BtnCellRenderer } from '../shared/btn-cell-renderer.component';
   styleUrls: ['./torn-player-table.component.scss'],
 })
 export class TornPlayerTableComponent {
+  cellClassRules = {
+    'cell-pass': (params: { value: string }) => params.value === 'green',
+  };
+
   columnDefs = [
+    {
+      field: 'Attack',
+      cellRenderer: BtnCellRenderer,
+    },
     { field: 'level' },
-    { field: 'player_id' },
+    {
+      cellClassRules: this.cellClassRules,
+
+      headerName: 'Status Color',
+      filter: true,
+      field: 'status.color',
+      cellStyle: (params: { value: string }) => {
+        if (
+          typeof params.value === 'string' &&
+          params.value.toLowerCase() === 'green'
+        ) {
+          return { backgroundColor: '#e0ffcd' };
+        }
+        return { backgroundColor: '#ffcbcb' };
+      },
+    },
     { field: 'name' },
     {
       field: 'status.description',
       headerName: 'Status Description',
-    },
-    {
-      field: 'status.state',
-      headerName: 'Status State',
-    },
-    {
-      field: 'status.color',
-      headerName: 'Status Color',
-    },
-    {
-      field: 'status.until',
-      headerName: 'Status Until',
-    },
-    {
-      field: 'Attack',
-      cellRenderer: BtnCellRenderer,
-      cellRendererParams: {
-        clicked: function (field: any) {
-          alert(`${field} was clicked`);
-        },
-      },
     },
   ];
 
@@ -49,26 +51,20 @@ export class TornPlayerTableComponent {
     filter: true,
   };
 
-  // Data that gets displayed in the grid
   public rowData$!: Observable<Player[]>;
 
-  // For accessing the Grid's API
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
   constructor(private tornStatusService: TornStatusService) {}
 
-  // Example load data from sever
   onGridReady(params: GridReadyEvent) {
     this.rowData$ = this.tornStatusService.getUserData();
-    this.rowData$.pipe(tap((x) => console.log(x))).subscribe();
   }
 
-  // Example of consuming Grid Event
   onCellClicked(e: CellClickedEvent): void {
     console.log('cellClicked', e);
   }
 
-  // Example using Grid's API
   clearSelection(): void {
     this.agGrid.api.deselectAll();
   }

@@ -6,9 +6,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TornPlayerTableComponent } from './torn-player-table/torn-player-table.component';
 import { BtnCellRenderer } from './shared/btn-cell-renderer.component';
+import { HeaderComponent } from './header/header.component';
+import { UserStatsComponent } from './user-stats/user-stats.component';
 
 @NgModule({
-  declarations: [AppComponent, TornPlayerTableComponent, BtnCellRenderer],
+  declarations: [
+    AppComponent,
+    TornPlayerTableComponent,
+    BtnCellRenderer,
+    HeaderComponent,
+    UserStatsComponent,
+  ],
   imports: [BrowserModule, AppRoutingModule, AgGridModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
